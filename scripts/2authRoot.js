@@ -23,7 +23,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import PersonalRoot from './PersonalRoot';
 import Auth from './2auth';
-import LoginRoot from './loginRoot';
 
 const Stack = createStackNavigator();
 
@@ -38,19 +37,15 @@ function AuthRoot(){
                 }}
             >
                 <Stack.Screen
-                    name="Auth"
-                    component={Auth}
-                />
-                <Stack.Screen
                     name='personalPage'
                     component={PersonalRoot}
                     options={{ tabBarLabel: 'My Account' }}
                 />
                 <Stack.Screen
-                    name='Login'
-                    component={LoginRoot}
-                    options={{ tabBarLabel: 'My Account' }}
+                    name="Auth"
+                    component={Auth}
                 />
+                
             </Stack.Navigator>
         </NavigationContainer>
     )

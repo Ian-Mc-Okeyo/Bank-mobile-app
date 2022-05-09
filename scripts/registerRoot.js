@@ -1,6 +1,7 @@
-import 'react-native-gesture-handler'
 import React, {useState} from 'react';
 import {
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   useColorScheme,
@@ -10,6 +11,8 @@ import {
   Alert,
   ToastAndroid,
   Modal,
+  Image,
+  ImageBackground,
 } from 'react-native';
 
 import {
@@ -21,13 +24,12 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import LoginPage from './LoginPage';
-import AuthRoot from './2authRoot'
+import PersonalRoot from './PersonalRoot';
+import RegisterPage from './register';
 
 const Stack = createStackNavigator();
 
-function LoginRoot(){
+function RegisterRoot(){
     return(
         <NavigationContainer independent={true}>
             <Stack.Navigator
@@ -43,13 +45,13 @@ function LoginRoot(){
                 }}
             >
                 <Stack.Screen
-                    name="Login"
-                    component={LoginPage}
+                    name="Register"
+                    component={RegisterPage}
                     options={{headerShown: true}}
                 />
                 <Stack.Screen
-                    name='AuthRoot'
-                    component={AuthRoot}
+                    name='personal'
+                    component={PersonalRoot}
                     options={{headerShown: false}}
                 />
             </Stack.Navigator>
@@ -57,4 +59,4 @@ function LoginRoot(){
     )
 }
 
-export default LoginRoot
+export default RegisterRoot

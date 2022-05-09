@@ -29,6 +29,7 @@ import Transfer from './Transfer';
 import PersonalPage from './personalPage';
 import Currencies from './currencies'
 
+
 const Stack = createStackNavigator()
 function PersonalRoot(){
     return(

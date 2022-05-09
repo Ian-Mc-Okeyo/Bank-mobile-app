@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import axios from 'axios';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,6 +9,7 @@ import {
   Pressable,
   Alert,
   ToastAndroid,
+  ActivityIndicator,
   Modal,
 } from 'react-native';
 
@@ -19,10 +21,70 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Deposit({navigation}){
-  const[isAgent, setIsAgent]= useState(false)
-  const[isAtm, setIsAtm]= useState(true)
+  const[isAgent, setIsAgent]= useState(false);
+  const[isAtm, setIsAtm]= useState(true);
+  const [userMadeRequest, setUserMadeRequest] = useState(false);
+  const [accountNo, setAccountNo] = useState('')
+  const [depositAmount, setDepositAmount] = useState('');
+  const [agentNo, setAgentNo]=useState('');
+  const [atmNo, setAtmNo] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
+
+  const getAccount=async ()=>{
+    const value = await AsyncStorage.getItem('accountNo');
+    console.log('Asynced value Deposit', value);
+    await setAccountNo(value);
+  }
+
+  getAccount()
+
+  const baseurl = "http://192.168.0.108:5000/deposit";
+
+  useEffect(()=>{
+    if(userMadeRequest){
+      setIsLoading(true)
+      async function deposit(){
+        axios.post(baseurl, {
+          accountNo: {accountNo},
+          depositAmount: {depositAmount},
+        }).then((response)=>{
+          console.log('Recieving the responses...')
+          AsyncStorage.setItem('balance', response.data.balance)
+          AsyncStorage.setItem('ownedCurrencies', response.data.currencies)
+          console.log('The bal', response.data.balance)
+          setUserMadeRequest(false)
+          setIsLoading(false)
+          if (response.data.success='false'){
+            alert(response.data.message)
+          }else{
+            
+            alert(response.data.message)
+          }
+        })
+      }
+
+      deposit()
+      console.log('deposit done')
+    }
+  }, [userMadeRequest])
+
+  const makeUserRequest = ()=>{
+    if(depositAmount==''){
+      alert('The amount field is em1pty')
+    }else if(agentNo=='' && atmNo==''){
+      if(isAtm){
+        alert('The ATM field is empty')
+      }else{
+        alert('The Agent Number field is Empty')
+      }
+    }else{
+      setUserMadeRequest(true);
+    }
+  }
+
 
   const changeAgentIcon=()=>{
     setIsAgent(true)
@@ -35,6 +97,7 @@ function Deposit({navigation}){
     return(
         <View style={styles.body}>
           <FontAwesome5 name='wallet' style={styles.icon}/>
+          {isLoading?<ActivityIndicator/>:<Text>(-)</Text>}
           <View style={styles.formContainer}>
             <View style={styles.optionsContainer}>
               <Pressable 
@@ -62,14 +125,20 @@ function Deposit({navigation}){
               <TextInput style={styles.input}
                 placeholder= 'Amount'
                 keyboardType='numeric'
+                onChangeText={(value)=>setDepositAmount(value)}
                 />
               
               <TextInput style={styles.input}
                 placeholder= {isAgent? 'Agent Number': 'ATM Number'}
                 keyboardType='numeric'
+                onChangeText={(value)=>isAgent?setAgentNo(value): setAtmNo(value)}
                 />
               
-              <Pressable style={styles.submitButton}>
+              <Pressable 
+                onPress={makeUserRequest}
+                style={styles.submitButton}
+                android_ripple={{color: '#ffffff'}}
+              >
                 <Text style={styles.submitText}>Submit</Text>
               </Pressable>
             </View>

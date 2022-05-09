@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   Button,
   FlatList,
@@ -37,7 +37,9 @@ import HomePage from './HomePage';
 import LoginRoot from './loginRoot';
 import LoginPage from './LoginPage';
 import ForexPage from './ForexPage';
-import RegisterPage from './register';
+import RegisterRoot from './registerRoot';
+
+
 
 const Stack = createStackNavigator();
 
@@ -54,6 +56,7 @@ const config = {
 };
 
 function App(){
+  
   return(
    <NavigationContainer independent={true}>
      <Stack.Navigator
@@ -91,7 +94,8 @@ function App(){
           />
         <Stack.Screen
           name="Register"
-          component={RegisterPage}
+          component={RegisterRoot}
+          options={{headerShown: false}}
           />
      </Stack.Navigator>
    </NavigationContainer>

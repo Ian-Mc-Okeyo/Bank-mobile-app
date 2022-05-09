@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler'
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -22,10 +22,34 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 
-function PersonalPage({navigation}){
+function PersonalPage({route, navigation}){
+
+  const [accountNo, setAccountNo] = useState('');
+  const [userName, setUserName] = useState('');
+  const [balance, setBalance] = useState('');
+
+  const getvalue=async ()=>{
+    const acc = await AsyncStorage.getItem('accountNo')
+    const name = await AsyncStorage.getItem('userName')
+    const bal = await AsyncStorage.getItem('balance')
+    console.log('Asynced value Personal Page secpond', acc);
+    await setAccountNo(acc);
+    await setBalance(bal);
+    await setUserName(name);
+  }
+
+  useEffect(()=>{
+    navigation.addListener('focus', async()=>{
+      getvalue()
+    })
+  }, [])
+  
+  console.log('The realll', accountNo);
+
   const goToDeposit=()=>{
     navigation.navigate('Deposit')
   }
@@ -50,9 +74,10 @@ function PersonalPage({navigation}){
         <View style={styles.body}>
             <View style={styles.allDetailsContainer}>
               <View style={styles.detailsContainer}>
-                <Text style={styles.greeting}>Good Evening</Text>
-                <Text style={styles.details}>IAN O</Text>
-                <Text style={styles.details}>Account: 1276231989</Text>
+                <Text style={styles.greeting}>Good Morning</Text>
+                <Text style={styles.details}>{userName}</Text>
+                <Text style={styles.details}>Account: {accountNo}</Text>
+                <Text style={styles.details}>Balance: {balance}</Text>
               </View>
                 <FontAwesome5 name='user' style={styles.userIcon}/>
             </View>
@@ -100,7 +125,7 @@ function PersonalPage({navigation}){
                 <Pressable
                   style={styles.otherActionsButton}
                 >
-                   <Text style={styles.details}>{withdrawIcon} Check transaction History</Text>
+                   <Text style={styles.details}>{withdrawIcon} $ Be your Financial Start $</Text>
                 </Pressable>
             </View>
         </View>
@@ -187,7 +212,6 @@ const styles = StyleSheet.create({
     padding: 15,
     margin: 20
   }
-
 })
 
 export default PersonalPage

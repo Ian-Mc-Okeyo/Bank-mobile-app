@@ -1,4 +1,4 @@
-package com.bank;
+package com.firstapp;
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 
@@ -10,10 +10,10 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "Bank";
+    return "FirstApp";
   }
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(null);
-  }
+}
 }

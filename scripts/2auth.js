@@ -19,7 +19,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-function Auth({navigation}){
+function Auth({route, navigation}){
 
     const backToLogin=()=>{
         navigation.navigate('Login')
@@ -31,6 +31,7 @@ function Auth({navigation}){
     return(
         <View style={styles.body}>
             <Text style={styles.title}>2-Auth Authentication</Text>
+            <Text>Received params: {JSON.stringify(route.params)}</Text>
            <Text style={styles.text}>
                A 4 digit code has beeen sent to your phone Number 0796417598
            </Text> 
